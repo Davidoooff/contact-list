@@ -45,22 +45,33 @@ function imprimirContactos() {
     });
 }
 
-console.log("Lista inicial de contactos:");
-imprimirContactos();
+function actualizarContactoExistente() {
+    var id = parseInt(prompt("ID del contacto a actualizar:"));
+    if (!isNaN(id)) {
+        var contactoExistente = listaDeContactos.find(function (contacto) {
+            return contacto.id === id;
+        });
 
-agregarContacto({
-    id: 4,
-    nombres: "Lucía",
-    apellidos: "Rodríguez",
-    telefono: "555-123-4567",
-    ubicaciones: { ciudad: "Ciudad4", direccion: "Dirección4" }
-});
-console.log("\nLista de contactos después de agregar a Lucía Rodríguez:");
-imprimirContactos();
+        if (contactoExistente) {
+            var nuevosNombres = prompt("Nuevos nombres del contacto:", contactoExistente.nombres);
+            var nuevosApellidos = prompt("Nuevos apellidos del contacto:", contactoExistente.apellidos);
+            var nuevoTelefono = prompt("Nuevo teléfono del contacto:", contactoExistente.telefono);
+            var nuevaCiudad = prompt("Nueva ciudad del contacto:", contactoExistente.ubicaciones.ciudad);
+            var nuevaDireccion = prompt("Nueva dirección del contacto:", contactoExistente.ubicaciones.direccion);
 
-borrarContacto(2);
-console.log("\nLista de contactos después de borrar a María González:");
-imprimirContactos();
+            contactoExistente.nombres = nuevosNombres;
+            contactoExistente.apellidos = nuevosApellidos;
+            contactoExistente.telefono = nuevoTelefono;
+            contactoExistente.ubicaciones.ciudad = nuevaCiudad;
+            contactoExistente.ubicaciones.direccion = nuevaDireccion;
 
+            actualizarListaDeContactos();
+        } else {
+            alert("No se encontró un contacto con el ID proporcionado.");
+        }
+    } else {
+        alert("ID inválido. Por favor, ingrese un número válido.");
+    }
+}
 
 
