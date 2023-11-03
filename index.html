@@ -1,101 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de contactos</title>
-
-    <script>
-        var count=0;
-     
-        function agregarValores(){
-            var nombre=document.getElementById("nombre").value;
-            var apellidos=document.getElementById("apellidos").value;
-            var correo=document.getElementById("correo").value;
-     
-            count++;
-     
-            if(nombre.length>0 || apellidos.length>0)
-            {
-                var tbody = document.getElementById("miTabla").getElementsByTagName("TBODY")[0];
-     
-                var attrId = document.createAttribute('id');
-                attrId.value=count;
-     
-                var td1 = document.createElement("TD");
-                td1.appendChild(document.createTextNode(nombre));
-                var td2 = document.createElement("TD");
-                td2.appendChild(document.createTextNode(apellidos));
-                var td3 = document.createElement("TD");
-                td3.appendChild(document.createTextNode(correo));
-                var td4 = document.createElement("TD");
-                td4.appendChild(crearButton(count));
-     
-                var row = document.createElement("TR");
-                row.setAttributeNode(attrId);
-                row.appendChild(td1);
-                row.appendChild(td2);
-                row.appendChild(td3);
-                row.appendChild(td4);
-                tbody.appendChild(row);
-            }
-     
-            document.getElementById("nombre").value="";
-            document.getElementById("apellidos").value="";
-            document.getElementById("correo").value="";
-        }
-     
-        function eliminarValor(id)
-        {
-            var row = document.getElementById(id);
-            row.parentNode.removeChild(row);
-        }
-     
-    
-        function crearButton(id)
-        {
-            var button=document.createElement("input");
-            var attrType=document.createAttribute('type');
-            attrType.value="button";
-            var attrValue=document.createAttribute('value');
-            attrValue.value="Eliminar";
-            var attrOnclick=document.createAttribute('onclick');
-            attrOnclick.value="eliminarValor("+count+");";
-     
-            button.setAttributeNode(attrType);
-            button.setAttributeNode(attrValue);
-            button.setAttributeNode(attrOnclick);
-     
-            return button;
-        }
-        </script>
-
-
+    <title>Lista de Contactos</title>
 </head>
 <body>
+    <h1>Lista de Contactos</h1>
+    <button onclick="agregarNuevoContacto()">Agregar Nuevo Contacto</button>
+    <button onclick="borrarContactoExistente()">Borrar Contacto Existente</button>
+    <div id="contactos">
+    </div>
 
-    <table id="miTabla">
-        <thead>
-            <tr>
-                <td>Nombre</td>
-                <td>Apellidos</td>
-                <td>Correo</td>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-     
-    <p>
-        <form>
-            <label>Nombre:</label> <input type="text" id="nombre">
-            <label>Apellidos:</label> <input type="text" id="apellidos">
-            <label>Correo:</label> <input type="text" id="correo">
-            <p>
-                <input type="button" onclick="agregarValores();" value="Agregar">
-            </p>
-        </form>
-    </p>
+    <script src="main.js"></script>
+    <script>
+
+        function agregarNuevoContacto() {
+            var nuevoContacto = {
+                id: listaDeContactos.length + 1,
+                nombres: prompt("Nombres del nuevo contacto:"),
+                apellidos: prompt("Apellidos del nuevo contacto:"),
+                telefono: prompt("Teléfono del nuevo contacto:"),
+                ubicaciones: {
+                    ciudad: prompt("Ciudad del nuevo contacto:"),
+                    direccion: prompt("Dirección del nuevo contacto:")
+                }
+            };
+            agregarContacto(nuevoContacto);
+            actualizarListaDeContactos();
+        }
+
+        
+        function borrarContactoExistente() {
+            var id = parseInt(prompt("ID del contacto a borrar:"));
+            if (!isNaN(id)) {
+                borrarContacto(id);
+                actualizarListaDeContactos();
+            } else {
+                alert("ID inválido. Por favor, ingrese un número válido.");
+            }
+        }
+
+       
+        function actualizarListaDeContactos() {
+            var contactosDiv = document.getElementById("contactos");
+            contactosDiv.innerHTML = ""; 
+
+            listaDeContactos.forEach(function (contacto) {
+                var contactoDiv = document.createElement("div");
+                contactoDiv.innerHTML = "ID: " + contacto.id + "<br>" +
+                    "Nombres: " + contacto.nombres + "<br>" +
+                    "Apellidos: " + contacto.apellidos + "<br>" +
+                    "Teléfono: " + contacto.telefono + "<br>" +
+                    "Ubicación - Ciudad: " + contacto.ubicaciones.ciudad + "<br>" +
+                    "Ubicación - Dirección: " + contacto.ubicaciones.direccion + "<br>------<br>";
+                contactosDiv.appendChild(contactoDiv);
+            });
+        }
+
     
+        actualizarListaDeContactos();
+    </script>
 </body>
 </html>
